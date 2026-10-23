@@ -12,7 +12,7 @@ function runCli(args) {
 }
 
 test("supported non-tidy commands print not implemented yet", () => {
-  for (const command of ["digest", "cards"]) {
+  for (const command of ["cards"]) {
     const result = runCli([command]);
     assert.equal(result.status, 0);
     assert.match(result.stdout, /not implemented yet/);
