@@ -14,4 +14,17 @@ Available commands:
 - `digest`
 - `cards`
 
-For now, each command prints `not implemented yet`.
+## `sloth tidy`
+
+Sort files in a folder into category subfolders using the local Gemma model through Ollama.
+
+- `sloth tidy <folder>` runs in dry-run mode and only prints planned moves.
+- `sloth tidy <folder> --apply` creates category folders and moves files.
+
+Example dry run:
+
+```bash
+$ sloth tidy ./Downloads
+report.pdf -> Documents/report.pdf
+photo.jpg -> Images/photo.jpg
+```
