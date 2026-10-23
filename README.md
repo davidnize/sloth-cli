@@ -49,4 +49,3 @@ The default model is the small `gemma3:1b`, so results are not perfect. In the e
 
 ## Built with GitHub Copilot
 
-The CLI skeleton, the Ollama helper, `tidy` (including a fix for dry-run and `--apply` disagreeing) and `digest` were built by assigning GitHub issues to Copilot's coding agent. Tests run automatically with GitHub Actions on every push and pull request. Run them locally with `node --test`.
