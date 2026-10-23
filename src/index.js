@@ -2,6 +2,7 @@
 
 import { pathToFileURL } from "node:url";
 import { tidy } from "./tidy.js";
+import { digest } from "./digest.js";
 
 const COMMANDS = new Set(["tidy", "digest", "cards"]);
 
@@ -10,7 +11,7 @@ function usage() {
 
 Commands:
   tidy <folder> [--apply]
-  digest
+  digest <file>
   cards`;
 }
 
@@ -51,6 +52,22 @@ export async function run(argv = process.argv.slice(2), io = console) {
 
     await tidy(folder, { apply, io });
     return 0;
+  }
+
+  if (command === "digest") {
+    const args = argv.slice(1);
+    if (args.length !== 1) {
+      io.error("Missing file path. Usage: sloth digest <file>");
+      return 1;
+    }
+
+    try {
+      await digest(args[0], { io });
+      return 0;
+    } catch (error) {
+      io.error(error?.message ?? String(error));
+      return 1;
+    }
   }
 
   io.log("not implemented yet");
