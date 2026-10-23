@@ -4,15 +4,14 @@ import { pathToFileURL } from "node:url";
 import { tidy } from "./tidy.js";
 import { digest } from "./digest.js";
 
-const COMMANDS = new Set(["tidy", "digest", "cards"]);
+const COMMANDS = new Set(["tidy", "digest"]);
 
 function usage() {
   return `Usage: sloth <command>
 
 Commands:
   tidy <folder> [--apply]
-  digest <file>
-  cards`;
+  digest <file>`;
 }
 
 export async function run(argv = process.argv.slice(2), io = console) {
