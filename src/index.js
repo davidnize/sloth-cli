@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { pathToFileURL } from "node:url";
+import { tidy } from "./tidy.js";
 
 const COMMANDS = new Set(["tidy", "digest", "cards"]);
 
@@ -8,12 +9,12 @@ function usage() {
   return `Usage: sloth <command>
 
 Commands:
-  tidy
+  tidy <folder> [--apply]
   digest
   cards`;
 }
 
-export function run(argv = process.argv.slice(2), io = console) {
+export async function run(argv = process.argv.slice(2), io = console) {
   const [command] = argv;
 
   if (!command || command === "--help") {
@@ -26,10 +27,43 @@ export function run(argv = process.argv.slice(2), io = console) {
     return 1;
   }
 
+  if (command === "tidy") {
+    const args = argv.slice(1);
+    let folder;
+    let apply = false;
+
+    for (const arg of args) {
+      if (arg === "--apply") {
+        apply = true;
+        continue;
+      }
+      if (arg.startsWith("-") || folder) {
+        io.error(usage());
+        return 1;
+      }
+      folder = arg;
+    }
+
+    if (!folder) {
+      io.error(usage());
+      return 1;
+    }
+
+    await tidy(folder, { apply, io });
+    return 0;
+  }
+
   io.log("not implemented yet");
   return 0;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  process.exitCode = run();
+  run()
+    .then((exitCode) => {
+      process.exitCode = exitCode;
+    })
+    .catch((error) => {
+      console.error(error?.message ?? String(error));
+      process.exitCode = 1;
+    });
 }
