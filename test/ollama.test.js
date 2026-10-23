@@ -25,8 +25,8 @@ test("ask sends request and returns response text", async () => {
   assert.equal(body.model, "gemma3:1b");
   assert.equal(body.prompt, "hello");
   assert.equal(body.stream, false);
-  assert.equal(body.temperature, 0);
-  assert.equal(body.seed, 42);
+  assert.equal(body.options.temperature, 0);
+  assert.equal(body.options.seed, 42);
 });
 
 test("ask throws friendly error when ollama is unavailable", async () => {
