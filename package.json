@@ -1,0 +1,24 @@
+{
+  "name": "sloth-cli",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidnize/sloth-cli.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davidnize/sloth-cli/issues"
+  },
+  "homepage": "https://github.com/davidnize/sloth-cli#readme",
+  "description": "A lazy local AI command-line tool powered by Gemma and Ollama",
+  "type": "module",
+  "bin": {
+    "sloth": "./src/index.js"
+  }
+}
