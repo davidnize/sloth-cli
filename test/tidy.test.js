@@ -41,7 +41,10 @@ test("tidy --apply creates folders and moves files", async () => {
     askFn: async () => "Documents",
   });
 
-  assert.deepEqual(logs, ["report.pdf -> Documents/report.pdf"]);
+  assert.deepEqual(logs, [
+    "report.pdf -> Documents/report.pdf",
+    "Tip: run `sloth tidy <folder>` without --apply first to preview moves.",
+  ]);
   assert.equal(await fs.readFile(path.join(folder, "Documents", "report.pdf"), "utf8"), "content");
   await assert.rejects(() => fs.stat(path.join(folder, "report.pdf")), /ENOENT/);
   await fs.rm(folder, { recursive: true, force: true });
@@ -74,8 +77,35 @@ test("tidy never overwrites existing files", async () => {
     askFn: async () => "Audio",
   });
 
-  assert.deepEqual(logs, ["song.mp3 -> Audio/song.mp3 (skipped: target exists)"]);
+  assert.deepEqual(logs, [
+    "song.mp3 -> Audio/song.mp3 (skipped: target exists)",
+    "Tip: run `sloth tidy <folder>` without --apply first to preview moves.",
+  ]);
   assert.equal(await fs.readFile(path.join(folder, "song.mp3"), "utf8"), "original");
   assert.equal(await fs.readFile(path.join(folder, "Audio", "song.mp3"), "utf8"), "existing");
+  await fs.rm(folder, { recursive: true, force: true });
+});
+
+test("same input produces the same plan twice with mocked ask", async () => {
+  const folder = await createTempFolder();
+  const firstLogs = [];
+  const secondLogs = [];
+  let askCalls = 0;
+  await fs.writeFile(path.join(folder, "holiday-selfie"), "content");
+  await fs.writeFile(path.join(folder, "notes.txt"), "content");
+
+  const askFn = async (prompt) => {
+    askCalls += 1;
+    if (prompt.includes("holiday-selfie")) {
+      return "Images";
+    }
+    return "Documents";
+  };
+
+  await tidy(folder, { io: { log: (line) => firstLogs.push(line) }, askFn });
+  await tidy(folder, { io: { log: (line) => secondLogs.push(line) }, askFn });
+
+  assert.deepEqual(firstLogs, secondLogs);
+  assert.equal(askCalls, 4);
   await fs.rm(folder, { recursive: true, force: true });
 });

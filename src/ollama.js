@@ -11,6 +11,10 @@ export async function ask(prompt) {
         model: "gemma3:1b",
         prompt,
         stream: false,
+        options: {
+          temperature: 0,
+          seed: 42,
+        },
       }),
     });
 
