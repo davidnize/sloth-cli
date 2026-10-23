@@ -12,7 +12,6 @@ Available commands:
 
 - `tidy`
 - `digest`
-- `cards`
 
 ## `sloth tidy`
 
